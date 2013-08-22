@@ -18,7 +18,7 @@ public class Shooter : MonoBehaviour
 	// Update is called once per frame
 	void Update ()
 	{
-		if (Input.GetMouseButton (0)) {
+		if (Input.GetMouseButtonDown (0)) {
 			Transform BulletInstance = (Transform)Instantiate (bullet, transform.position + (transform.rotation * Vector3.forward * shotOffset), transform.rotation);
 			BulletInstance.rigidbody.AddForce (transform.forward * speed);
 		}

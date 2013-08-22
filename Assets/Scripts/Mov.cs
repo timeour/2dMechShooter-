@@ -11,9 +11,11 @@ public class Mov : MonoBehaviour
 	
 	}
 	
-	void Update() {
-		transform.LookAt(new Vector3(0f, transform.position.y, 0f
-			));
+	void Update ()
+	{
+		Vector3 mousePositionInWorld = Camera.main.ScreenToWorldPoint (new Vector3 (Input.mousePosition.x, Input.mousePosition.y, 0f));
+		Debug.Log(mousePositionInWorld);
+		transform.LookAt (new Vector3 (mousePositionInWorld.x, transform.position.y, mousePositionInWorld.z));
 	}
 	
 	// Update is called once per frame
