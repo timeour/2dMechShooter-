@@ -11,6 +11,11 @@ public class Mov : MonoBehaviour
 	
 	}
 	
+	void Update() {
+		transform.LookAt(new Vector3(0f, transform.position.y, 0f
+			));
+	}
+	
 	// Update is called once per frame
 	void FixedUpdate ()
 	{
@@ -19,7 +24,7 @@ public class Mov : MonoBehaviour
 			0f,
 			Input.GetAxis ("Vertical")
 		) * speed * Time.fixedDeltaTime;
-		Debug.Log(velocity);
+
 		rigidbody.velocity = velocity;
 		
 	}
