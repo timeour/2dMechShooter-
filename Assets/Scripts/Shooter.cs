@@ -19,8 +19,8 @@ public class Shooter : MonoBehaviour
 	void Update ()
 	{
 		if (Input.GetMouseButtonDown (0)) {
-			Transform BulletInstance = (Transform)Instantiate (bullet, transform.position + (transform.rotation * Vector3.forward * shotOffset), transform.rotation);
-			BulletInstance.rigidbody.AddForce (transform.forward * speed);
+			Transform BulletInstance = (Transform)Instantiate (bullet, transform.position + (transform.right * shotOffset), transform.rotation);
+			BulletInstance.rigidbody.AddForce (transform.right * speed);
 		}
 	}
 }
