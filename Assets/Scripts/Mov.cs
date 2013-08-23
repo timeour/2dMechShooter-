@@ -5,7 +5,7 @@ public class Mov : MonoBehaviour
 {
 	public float speed;
 	private OTAnimatingSprite _mySprite;
-	bool ismov;
+	bool isMoving;
 
 	public OTAnimatingSprite MySprite {
 		get {
@@ -36,6 +36,19 @@ public class Mov : MonoBehaviour
 	// Update is called once per frame
 	void FixedUpdate ()
 	{
+		// Set animation
+//		Debug.Log(rigidbody.velocity.sqrMagnitude + " " + isMoving);
+		if (rigidbody.velocity.sqrMagnitude > 1000f) {
+			if (!isMoving) {
+				isMoving = true;
+				MySprite.Play ();
+			}
+		} else {
+			isMoving = false;
+			MySprite.Stop ();
+			MySprite.ShowFrame(0);
+		}
+		
 		Vector3 velocity = new Vector3 (
 			Input.GetAxis ("Horizontal"),
 			Input.GetAxis ("Vertical"),

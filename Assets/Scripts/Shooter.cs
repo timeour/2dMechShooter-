@@ -7,24 +7,31 @@ public class Shooter : MonoBehaviour
 	public Transform bullet;
 	public int speed;
 	public float shotOffset;
-	public AudioClip fon;
 	public AudioClip fire;
+	public float fireRate;
+	private float lastShotTime;
 	
 
 	// Use this for initialization
 	void Start ()
 	{
-		audio.PlayOneShot(fon);
 	}
 	
 	// Update is called once per frame
 	void Update ()
 	{
-
-		if (Input.GetMouseButtonDown (0)) {
-			audio.PlayOneShot(fire);
-			Transform BulletInstance = (Transform)Instantiate (bullet, transform.position + (transform.right * shotOffset), transform.rotation);
-			BulletInstance.rigidbody.AddForce (transform.right * speed);
+		if (Input.GetMouseButton (0)) {
+			if (lastShotTime + fireRate < Time.time) {
+				Fire ();
+				lastShotTime = Time.time;
+			}
 		}
+	}
+	
+	public void Fire ()
+	{
+		audio.Play();
+		Transform BulletInstance = (Transform)Instantiate (bullet, transform.position + (transform.right * shotOffset), transform.rotation);
+		BulletInstance.rigidbody.AddForce (transform.right * speed);
 	}
 }
