@@ -53,7 +53,7 @@ public class Mov : MonoBehaviour
 			Input.GetAxis ("Horizontal"),
 			Input.GetAxis ("Vertical"),
 			0f
-		) * speed * Time.fixedDeltaTime;
+		).normalized * speed;
 
 		rigidbody.velocity = velocity;
 		
