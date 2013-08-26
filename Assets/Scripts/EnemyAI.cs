@@ -14,9 +14,9 @@ public class EnemyAI : MonoBehaviour
 			if (_state != value) {
 				switch (value) {
 				case AIState.Follow:
-//					for example play sound "I'm following!"
 					break;
 				case AIState.Search:
+					MoveToPoint (GetNewTarget ());
 					break;
 				}
 				_state = value;
@@ -42,11 +42,13 @@ public class EnemyAI : MonoBehaviour
 	
 	private void Update ()
 	{
-		if(CheckingPos ()){
+		if (CheckingPos ()) {
 			State = AIState.Follow;
-		}
-		else
+		} else
 			State = AIState.Search;
+		int i, j;
+		
+		Room.GetRoomIndexAtPosition (transform.position, out i, out j);
 	}
 	
 	void FixedUpdate ()
@@ -56,30 +58,55 @@ public class EnemyAI : MonoBehaviour
 			HandleFollow ();
 			break;
 		case AIState.Search:
-			HandleSearch();
+			HandleSearch ();
 			break;
 		}
+	}
+	
+	public void MoveToPoint (Vector3 point)
+	{
+		Vector3 direction = (point - transform.position).normalized;
+		rigidbody.velocity = direction * speed;
 	}
 
 	void HandleFollow ()
 	{
-		speed = 100f;
-		Vector3 direction = (Target.transform.position - transform.position).normalized;
-		rigidbody.velocity = direction * speed;
+		MoveToPoint (Target.transform.position);
 	}
 	
-	void HandleSearch() {
-		speed = 0f;
-		Vector3 direction = (Target.transform.position - transform.position).normalized;
-		rigidbody.velocity = direction * speed;
+	void HandleSearch ()
+	{
+		
+	}
+	
+	public Vector3 GetNewTarget ()
+	{
+		Vector3 ret = Vector3.zero;
+		
+		int i, j;
+		
+		Room.GetRoomIndexAtPosition (transform.position, out i, out j);
+		
+		GameObject targetRoom = GameObject.Find ("Room_" + i + "_" + j);
+		
+		if (targetRoom == null) {
+			Debug.LogError ("There is no room at " + i + ":" + j + "!");
+		} else {
+			Room r = targetRoom.GetComponent<Room> ();
+		
+			Side s = r.entries [Random.Range (0, r.entries.Length)];
+		
+			ret = r.GetEntrancePosition (s);
+		}
+		return ret;
 	}
 
 	bool CheckingPos ()
 	{
 		bool ret = false;
 		
-		if(Mathf.RoundToInt(transform.position.x / 500) == Mathf.RoundToInt(Target.transform.position.x / 500)) {
-			if(Mathf.RoundToInt(transform.position.y / 500) == Mathf.RoundToInt(Target.transform.position.y / 500)) {
+		if (Mathf.RoundToInt (transform.position.x / 500) == Mathf.RoundToInt (Target.transform.position.x / 500)) {
+			if (Mathf.RoundToInt (transform.position.y / 500) == Mathf.RoundToInt (Target.transform.position.y / 500)) {
 				ret = true;
 			}
 		}	
