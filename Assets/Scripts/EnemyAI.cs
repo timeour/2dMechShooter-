@@ -23,7 +23,7 @@ public class EnemyAI : MonoBehaviour
 			}
 		}
 	}
-
+	int i1 = 1, j1 = -1;
 	private AIState _state;
 	private GameObject _target;
 
@@ -46,9 +46,14 @@ public class EnemyAI : MonoBehaviour
 			State = AIState.Follow;
 		} else
 			State = AIState.Search;
-		int i, j;
+		int i2, j2;
 		
-		Room.GetRoomIndexAtPosition (transform.position, out i, out j);
+		Room.GetRoomIndexAtPosition (transform.position, out i2, out j2);
+		if ((i1 != i2) || (j1 != j2)) {
+			i1 = i2;
+			j1 = j2;
+			MoveToPoint (GetNewTarget ());
+		}
 	}
 	
 	void FixedUpdate ()

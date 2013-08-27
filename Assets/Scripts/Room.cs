@@ -36,7 +36,7 @@ public class Room : MonoBehaviour
 public enum Side
 {
 	up = 0,
-	right = 1,
+	left = 1,
 	down = 2,
-	left = 3
+	right = 3
 }                           
