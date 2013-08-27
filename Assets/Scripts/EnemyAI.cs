@@ -4,6 +4,12 @@ using System.Collections;
 public class EnemyAI : MonoBehaviour
 {
 
+	public Transform bullet;
+	public int bullspeed;
+	public float shotOffset;
+	public float fireRate;
+	private float lastShotTime;
+	public float attackDist;
 	public float speed;
 
 	public AIState State {
@@ -13,6 +19,8 @@ public class EnemyAI : MonoBehaviour
 		set {
 			if (_state != value) {
 				switch (value) {
+				case AIState.Shoot:
+					break;	
 				case AIState.Follow:
 					break;
 				case AIState.Search:
@@ -54,6 +62,7 @@ public class EnemyAI : MonoBehaviour
 			j1 = j2;
 			MoveToPoint (GetNewTarget ());
 		}
+		
 	}
 	
 	void FixedUpdate ()
@@ -61,6 +70,7 @@ public class EnemyAI : MonoBehaviour
 		switch (_state) {
 		case AIState.Follow:
 			HandleFollow ();
+			Shoot ();
 			break;
 		case AIState.Search:
 			HandleSearch ();
@@ -77,6 +87,13 @@ public class EnemyAI : MonoBehaviour
 	void HandleFollow ()
 	{
 		MoveToPoint (Target.transform.position);
+		Vector3 TargetPosition = _target.transform.position;
+		float angle = Vector3.Angle (new Vector3 (TargetPosition.x, TargetPosition.y, transform.position.z) - transform.position, Vector3.right);
+		if (TargetPosition.y < transform.position.y) {
+			transform.rotation = Quaternion.Euler (0f, 0f, -angle);
+		} else {
+			transform.rotation = Quaternion.Euler (0f, 0f, angle);
+		}
 	}
 	
 	void HandleSearch ()
@@ -84,6 +101,16 @@ public class EnemyAI : MonoBehaviour
 		
 	}
 	
+	void Shoot (){
+		
+			if (lastShotTime + fireRate < Time.time) {
+				Transform BulletInstance = (Transform)Instantiate (bullet, transform.position + (transform.right * shotOffset), transform.rotation);
+				BulletInstance.rigidbody.velocity = transform.right * bullspeed;
+				lastShotTime = Time.time;
+			}
+		  
+	}
+		
 	public Vector3 GetNewTarget ()
 	{
 		Vector3 ret = Vector3.zero;
@@ -109,10 +136,13 @@ public class EnemyAI : MonoBehaviour
 	bool CheckingPos ()
 	{
 		bool ret = false;
+		float distance = Vector3.Distance(transform.position, Target.transform.position);
 		
 		if (Mathf.RoundToInt (transform.position.x / 500) == Mathf.RoundToInt (Target.transform.position.x / 500)) {
 			if (Mathf.RoundToInt (transform.position.y / 500) == Mathf.RoundToInt (Target.transform.position.y / 500)) {
-				ret = true;
+				//if ((distance <= attackDist) ) {
+					ret = true;
+				//}
 			}
 		}	
 		
@@ -122,7 +152,7 @@ public class EnemyAI : MonoBehaviour
 
 public enum AIState
 {
-	
+	Shoot,
 	Follow,
 	Search
 	
