@@ -8,5 +8,9 @@ public class Bullet : MonoBehaviour
 		if (other.tag != "Bullet") {
 			Destroy (gameObject);
 		}
+		if (other.tag == "Enemy")
+		{
+			Destroy (other.gameObject);
+		}
 	}
 }
