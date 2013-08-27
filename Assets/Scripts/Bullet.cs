@@ -3,6 +3,8 @@ using System.Collections;
 
 public class Bullet : MonoBehaviour
 {
+	public int damage;
+
 	void OnTriggerEnter (Collider other)
 	{
 		if (other.tag != "Bullet") {
@@ -10,7 +12,10 @@ public class Bullet : MonoBehaviour
 		}
 		if (other.tag == "Enemy")
 		{
-			Destroy (other.gameObject);
+			other.GetComponent<EnemyAI> ().Damage (damage);
+		}
+		if (other.tag == "Player"){
+			other.GetComponent<Mov> ().Damage(damage);
 		}
 	}
 }

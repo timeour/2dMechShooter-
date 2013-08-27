@@ -5,13 +5,17 @@ public class EnemyAI : MonoBehaviour
 {
 
 	public Transform bullet;
+	public Transform myHPBar;
+	private float initHPBarSize;
 	public int bullspeed;
 	public float shotOffset;
 	public float fireRate;
 	private float lastShotTime;
 	public float attackDist;
 	public float speed;
-
+	public float maxHP;
+	private float currentHP;
+	
 	public AIState State {
 		get {
 			return _state;
@@ -31,6 +35,7 @@ public class EnemyAI : MonoBehaviour
 			}
 		}
 	}
+
 	int i1 = 1, j1 = -1;
 	private AIState _state;
 	private GameObject _target;
@@ -46,6 +51,8 @@ public class EnemyAI : MonoBehaviour
 
 	private void Start ()
 	{
+		currentHP = maxHP;
+		initHPBarSize = myHPBar.localScale.x;
 	}
 	
 	private void Update ()
@@ -63,6 +70,8 @@ public class EnemyAI : MonoBehaviour
 			MoveToPoint (GetNewTarget ());
 		}
 		
+		// HP Bar
+		myHPBar.localScale = new Vector3 (currentHP / maxHP * initHPBarSize, myHPBar.localScale.y, myHPBar.localScale.z);
 	}
 	
 	void FixedUpdate ()
@@ -101,13 +110,22 @@ public class EnemyAI : MonoBehaviour
 		
 	}
 	
-	void Shoot (){
+	public void Damage (float damage)
+	{
+		currentHP -= damage;
+		if (currentHP <= 0) {
+			Destroy (gameObject);
+		}
+	}
+	
+	void Shoot ()
+	{
 		
-			if (lastShotTime + fireRate < Time.time) {
-				Transform BulletInstance = (Transform)Instantiate (bullet, transform.position + (transform.right * shotOffset), transform.rotation);
-				BulletInstance.rigidbody.velocity = transform.right * bullspeed;
-				lastShotTime = Time.time;
-			}
+		if (lastShotTime + fireRate < Time.time) {
+			Transform BulletInstance = (Transform)Instantiate (bullet, transform.position + (transform.right * shotOffset), transform.rotation);
+			BulletInstance.rigidbody.velocity = transform.right * bullspeed;
+			lastShotTime = Time.time;
+		}
 		  
 	}
 		
@@ -136,12 +154,12 @@ public class EnemyAI : MonoBehaviour
 	bool CheckingPos ()
 	{
 		bool ret = false;
-		float distance = Vector3.Distance(transform.position, Target.transform.position);
+		float distance = Vector3.Distance (transform.position, Target.transform.position);
 		
 		if (Mathf.RoundToInt (transform.position.x / 500) == Mathf.RoundToInt (Target.transform.position.x / 500)) {
 			if (Mathf.RoundToInt (transform.position.y / 500) == Mathf.RoundToInt (Target.transform.position.y / 500)) {
 				//if ((distance <= attackDist) ) {
-					ret = true;
+				ret = true;
 				//}
 			}
 		}	

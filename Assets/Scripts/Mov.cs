@@ -6,6 +6,8 @@ public class Mov : MonoBehaviour
 	public float speed;
 	private OTAnimatingSprite _mySprite;
 	bool isMoving;
+	public int health;
+	public int healthMax;
 
 	public OTAnimatingSprite MySprite {
 		get {
@@ -57,5 +59,24 @@ public class Mov : MonoBehaviour
 
 		rigidbody.velocity = velocity;
 		
+	}
+	
+	void OnGUI ()
+	{
+		string str;
+		if (health > 0) {
+			str = health + " / " + healthMax;
+		} else {
+			str = "Dead";
+			Destroy(gameObject);
+		}
+		GUI.Box (
+				new Rect (Screen.width / 2 - 40,Screen.height - 40, 80, 30), 
+				str);
+		
+	}
+	
+	public void Damage (int damage){
+		health -= damage;
 	}
 }
