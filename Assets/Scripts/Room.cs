@@ -20,7 +20,7 @@ public class Room : MonoBehaviour
 		
 		Quaternion rot = Quaternion.Euler (0f, 0f, 90f * (int)side);
 		
-		ret = rot * new Vector3 (0f, ROOM_SIZE * 0.5f, 0f) + transform.position;
+		ret = rot * new Vector3 (0f, ROOM_SIZE * 0.5f + 5f, 0f) + transform.position;
 		
 		return ret;
 	}

@@ -5,7 +5,8 @@ public class EnemyAI : MonoBehaviour
 {
 
 	public Transform bullet;
-	public Transform myHPBar;
+	public Transform hpBarPrefab;
+	private Transform myHPBar;
 	private float initHPBarSize;
 	public int bullspeed;
 	public float shotOffset;
@@ -15,7 +16,8 @@ public class EnemyAI : MonoBehaviour
 	public float speed;
 	public float maxHP;
 	private float currentHP;
-	
+	private AIState _state;
+
 	public AIState State {
 		get {
 			return _state;
@@ -36,8 +38,18 @@ public class EnemyAI : MonoBehaviour
 		}
 	}
 
+	private OTAnimatingSprite _mySprite;
+
+	public OTAnimatingSprite MySprite {
+		get {
+			if (_mySprite == null) {
+				_mySprite = GetComponentInChildren<OTAnimatingSprite> ();
+			}
+			return _mySprite;
+		}
+	}
+
 	int i1 = 1, j1 = -1;
-	private AIState _state;
 	private GameObject _target;
 
 	public GameObject Target {
@@ -51,6 +63,8 @@ public class EnemyAI : MonoBehaviour
 
 	private void Start ()
 	{
+		Transform newHPBar = Instantiate (hpBarPrefab) as Transform;
+		myHPBar = newHPBar.transform;
 		currentHP = maxHP;
 		initHPBarSize = myHPBar.localScale.x;
 	}
@@ -71,6 +85,7 @@ public class EnemyAI : MonoBehaviour
 		}
 		
 		// HP Bar
+		myHPBar.transform.position = transform.position + new Vector3 (-initHPBarSize * 0.5f, MySprite.transform.localScale.y, 0f);
 		myHPBar.localScale = new Vector3 (currentHP / maxHP * initHPBarSize, myHPBar.localScale.y, myHPBar.localScale.z);
 	}
 	
@@ -84,6 +99,13 @@ public class EnemyAI : MonoBehaviour
 		case AIState.Search:
 			HandleSearch ();
 			break;
+		}
+	}
+	
+	void OnDestroy ()
+	{
+		if (Application.isPlaying && myHPBar != null) {
+			Destroy (myHPBar.gameObject);
 		}
 	}
 	
@@ -148,21 +170,21 @@ public class EnemyAI : MonoBehaviour
 		
 			ret = r.GetEntrancePosition (s);
 		}
+		
+		Debug.Log ("Founded target at " + ret + " for " + transform.position + " in " + i + ":" + j + "room");
+		
 		return ret;
 	}
 
 	bool CheckingPos ()
 	{
 		bool ret = false;
-		float distance = Vector3.Distance (transform.position, Target.transform.position);
 		
 		if (Mathf.RoundToInt (transform.position.x / 500) == Mathf.RoundToInt (Target.transform.position.x / 500)) {
 			if (Mathf.RoundToInt (transform.position.y / 500) == Mathf.RoundToInt (Target.transform.position.y / 500)) {
-				//if ((distance <= attackDist) ) {
 				ret = true;
-				//}
 			}
-		}	
+		}
 		
 		return ret;
 	}
