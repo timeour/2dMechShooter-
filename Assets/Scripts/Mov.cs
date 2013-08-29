@@ -48,7 +48,7 @@ public class Mov : MonoBehaviour
 		} else {
 			isMoving = false;
 			MySprite.Stop ();
-			MySprite.ShowFrame(0);
+			MySprite.ShowFrame (0);
 		}
 		
 		Vector3 velocity = new Vector3 (
@@ -68,15 +68,16 @@ public class Mov : MonoBehaviour
 			str = health + " / " + healthMax;
 		} else {
 			str = "Dead";
-			Destroy(gameObject);
+			Destroy (gameObject);
 		}
 		GUI.Box (
-				new Rect (Screen.width / 2 - 40,Screen.height - 40, 80, 30), 
+				new Rect (Screen.width / 2 - 40, Screen.height - 40, 80, 30), 
 				str);
 		
 	}
 	
-	public void Damage (int damage){
+	public void Damage (int damage)
+	{
 		health -= damage;
 	}
 }
