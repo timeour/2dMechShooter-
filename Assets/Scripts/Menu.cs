@@ -14,33 +14,56 @@ public class Menu : MonoBehaviour {
 	public Rect playGameRect;
 	public Rect quitRect;
 	private bool optionsMode = false;
-
-	void OnGUI(){
-			
-	    if(!optionsMode){
-	        GUI.Label(new Rect(Screen.width / 2, 0, 50, 20),"Welcome",welcomeLabel);
+	private bool menuMode = true;   //1
+	private bool gameMode = false;  //1
 	
-	        GUI.skin = customSkin;
-	
-	        if(GUI.Button(playGameRect,"Play Game")){
-	            Application.LoadLevel("game3");  //1
-	        }
-	                   
-	        if(GUI.Button(quitRect,"Quit")){
-	            Application.Quit();                   //2
-	        }
-	                   
-	    }else{
-	                                           
-	        GUI.Label(new Rect(Screen.width / 2, 0, 50, 20), "Options",welcomeLabel);
-	                   
-	        GUI.skin = customSkin;
-	                             
-	        if(GUI.Button(new Rect(20, 190, 100, 30),"<< Back")){
-	            optionsMode = false;
-	        }
-	           
-	    }  
-	                           
+	void Awake(){
+    	DontDestroyOnLoad(this);
 	}
+	
+	void Update  () {  
+	  	if (Input.GetKeyDown (KeyCode.Return)) {  // херачит рестарт при нажатии Enter
+	    	Application.LoadLevel (0);  
+	  	}  
+	}
+	
+	void OnGUI(){
+    if (Input.GetKey(KeyCode.Escape)){  //2
+        menuMode = true;                //1
+        optionsMode = false;  
+        Time.timeScale = 0;             //3
+                
+    }
+
+    if(menuMode){
+        if(!optionsMode){                       
+                        
+            GUI.Label(new Rect(Screen.width / 2, 0, 50, 20), "Welcome",welcomeLabel);
+                
+            GUI.skin = customSkin;
+                        
+            if(!gameMode){              //1
+                if(GUI.Button(playGameRect, "Play Game")){
+                    menuMode = false;   //1
+                    gameMode = true;    //1
+                    Time.timeScale = 1; //3
+                    Application.LoadLevel("game3");
+                }
+            }else{
+                if(GUI.Button(playGameRect,"Resume")){
+
+                    Time.timeScale = 1; //3
+                    menuMode = false;   //1
+                }
+            }
+               
+                        
+            if(GUI.Button(quitRect,"Quit")){
+                Application.Quit();
+            }
+                        
+        }
+    }
+
+}
 }
