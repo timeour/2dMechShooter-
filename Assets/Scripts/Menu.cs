@@ -4,74 +4,67 @@ using System.Collections;
 public class Menu : MonoBehaviour
 {
 
-	// Use this for initialization
-	void Start ()
-	{
-	
-	}
-
 	public GUIStyle welcomeLabel;
 	public GUISkin customSkin;
 	public Rect playGameRect;
 	public Rect quitRect;
 	public Rect ReRect;
-	private bool optionsMode = false;
-	private bool menuMode = true;   //1
-	private bool gameMode = false;  //1
+	private MenuMode menuMode;
+	public Renderer comicPlane;
+	public Material[] comics;
+	private int comicIndex;
 	
 	void Awake ()
 	{
-		DontDestroyOnLoad (this);
 	}
 	
 	void Update ()
-	{  
-	    
+	{
+		if (menuMode == MenuMode.Comics) {
+			if (Input.GetMouseButtonDown (0)) {
+				if (comicIndex < comics.Length - 1) {
+					comicIndex++;
+					comicPlane.sharedMaterial = comics [comicIndex];
+				} else { 
+					Application.LoadLevel ("game3");
+				}
+			}
+		}
 	}
 	
 	public void OnGUI ()
 	{
-		if (Input.GetKey (KeyCode.Escape)) {  //2
-			menuMode = true;                //1
-			optionsMode = false;  
-			Time.timeScale = 0;             //3
-                
-		}
-
-		if (menuMode) {
-			if (!optionsMode) {                       
-                        
-				GUI.Label (new Rect (Screen.width / 2, 0, 50, 20), "2D Mech Shooter", welcomeLabel);
-                
-				GUI.skin = customSkin;
-                        
-				if (!gameMode) {              //1
-					if (GUI.Button (playGameRect, "Play Game")) {
-						menuMode = false;   //1
-						gameMode = true;    //1
-						Time.timeScale = 1; //3
-						Application.LoadLevel ("game3");
-					}
-				} else {
-					if (GUI.Button (playGameRect, "Resume")) {
-
-						Time.timeScale = 1; //3
-						menuMode = false;   //1
-					}
-					if (GUI.Button (ReRect, "Restart")) {
-						Application.LoadLevel ("game3");  
-						menuMode = false;
-						Time.timeScale = 1;
-					}
-				}
-               
-                        
-				if (GUI.Button (quitRect, "Quit")) {
-					Application.Quit ();
-				}
-                        
+		switch (menuMode) {
+		case MenuMode.MainMenu:
+			GUI.Label (new Rect (Screen.width / 2, 0, 50, 20), "Welcome", welcomeLabel);   
+			GUI.skin = customSkin;
+			
+			if (GUI.Button (playGameRect, "Play Game")) {
+				StartGame ();
 			}
+			if (GUI.Button (quitRect, "Quit")) {
+				Application.Quit ();
+			}
+			break;
+		case MenuMode.Options:
+			break;
+		case MenuMode.Comics:
+			break;
 		}
-
 	}
+
+	void StartGame ()
+	{
+		menuMode = MenuMode.Comics;
+		comicPlane.gameObject.SetActive (true);
+		comicIndex = 0;
+		comicPlane.sharedMaterial = comics [comicIndex];
+	}
+}
+
+public enum MenuMode
+{
+	MainMenu,
+	Options,
+	Comics
 }
