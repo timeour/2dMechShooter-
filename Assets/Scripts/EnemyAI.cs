@@ -3,7 +3,6 @@ using System.Collections;
 
 public class EnemyAI : MonoBehaviour
 {
-
 	public Transform bullet;
 	public Transform hpBarPrefab;
 	private Transform myHPBar;
@@ -15,6 +14,7 @@ public class EnemyAI : MonoBehaviour
 	public float attackDist;
 	public float speed;
 	public float maxHP;
+	public float damage;
 	private float currentHP;
 	private AIState _state;
 
@@ -137,7 +137,7 @@ public class EnemyAI : MonoBehaviour
 		currentHP -= damage;
 		if (currentHP <= 0) {
 			Destroy (gameObject);
-			Bullet.ScorePlus();
+			Bullet.ScorePlus ();
 		}
 	}
 	
@@ -145,8 +145,9 @@ public class EnemyAI : MonoBehaviour
 	{
 		
 		if (lastShotTime + fireRate < Time.time) {
-			Transform BulletInstance = (Transform)Instantiate (bullet, transform.position + (transform.right * shotOffset), transform.rotation);
-			BulletInstance.rigidbody.velocity = transform.right * bullspeed;
+			Transform bulletInstance = (Transform)Instantiate (bullet, transform.position + (transform.right * shotOffset), transform.rotation);
+			bulletInstance.rigidbody.velocity = transform.right * bullspeed;
+			bulletInstance.GetComponent<Bullet> ().damage = damage;
 			lastShotTime = Time.time;
 		}
 		  

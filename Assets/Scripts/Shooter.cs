@@ -3,7 +3,7 @@ using System.Collections;
 
 public class Shooter : MonoBehaviour
 {
-	
+	public float damage;
 	public Transform bullet;
 	public int speed;
 	public float shotOffset;
@@ -30,8 +30,9 @@ public class Shooter : MonoBehaviour
 	
 	public void Fire ()
 	{
-		audio.Play();
-		Transform BulletInstance = (Transform)Instantiate (bullet, transform.position + (transform.right * shotOffset), transform.rotation);
-		BulletInstance.rigidbody.AddForce (transform.right * speed);
+		audio.Play ();
+		Transform bulletInstance = (Transform)Instantiate (bullet, transform.position + (transform.right * shotOffset), transform.rotation);
+		bulletInstance.rigidbody.AddForce (transform.right * speed);
+		bulletInstance.GetComponent<Bullet> ().damage = damage;
 	}
 }

@@ -21,7 +21,6 @@ public class Spawner : MonoBehaviour
 			Spawn ();
 			scoore = Bullet.getScore ();
 		}
-		Debug.Log (scoore + " " + Bullet.getScore ());
 	}
 
 	void Spawn ()
