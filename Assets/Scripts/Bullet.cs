@@ -25,4 +25,7 @@ public class Bullet : MonoBehaviour
 	public static int getScore () {
 		return score;
 	}
+	public static void setScore(){
+		score = 0;
+	}
 }

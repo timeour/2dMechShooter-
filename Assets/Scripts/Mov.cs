@@ -69,7 +69,7 @@ public class Mov : MonoBehaviour
 		} else {
 			/*str = "Dead";
 			Destroy (gameObject);*/
-			Application.LoadLevel (0);
+			Application.LoadLevel (2);
 		}
 		GUI.Box (
 				new Rect (Screen.width / 2 - 40, Screen.height - 40, 80, 30), 
