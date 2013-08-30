@@ -137,6 +137,7 @@ public class EnemyAI : MonoBehaviour
 		currentHP -= damage;
 		if (currentHP <= 0) {
 			Destroy (gameObject);
+			Bullet.ScorePlus();
 		}
 	}
 	
@@ -170,8 +171,6 @@ public class EnemyAI : MonoBehaviour
 		
 			ret = r.GetEntrancePosition (s);
 		}
-		
-		Debug.Log ("Founded target at " + ret + " for " + transform.position + " in " + i + ":" + j + "room");
 		
 		return ret;
 	}

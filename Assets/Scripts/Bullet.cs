@@ -4,6 +4,7 @@ using System.Collections;
 public class Bullet : MonoBehaviour
 {
 	public int damage;
+	private static int score = 0;
 
 	void OnTriggerEnter (Collider other)
 	{
@@ -17,5 +18,11 @@ public class Bullet : MonoBehaviour
 		if (other.tag == "Player"){
 			other.GetComponent<Mov> ().Damage(damage);
 		}
+	}
+	public static void ScorePlus (){
+		score += 10;
+	}
+	public static int getScore () {
+		return score;
 	}
 }

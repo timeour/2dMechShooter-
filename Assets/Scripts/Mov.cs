@@ -6,7 +6,7 @@ public class Mov : MonoBehaviour
 	public float speed;
 	private OTAnimatingSprite _mySprite;
 	bool isMoving;
-	public int health;
+	private int health;
 	public int healthMax;
 
 	public OTAnimatingSprite MySprite {
@@ -21,7 +21,7 @@ public class Mov : MonoBehaviour
 	// Use this for initialization
 	void Start ()
 	{
-		
+		health = healthMax;
 	}
 	
 	void Update ()
@@ -63,16 +63,20 @@ public class Mov : MonoBehaviour
 	
 	void OnGUI ()
 	{
-		string str;
+		string str = null;
 		if (health > 0) {
 			str = health + " / " + healthMax;
 		} else {
-			str = "Dead";
-			Destroy (gameObject);
+			/*str = "Dead";
+			Destroy (gameObject);*/
+			Application.LoadLevel (0);
 		}
 		GUI.Box (
 				new Rect (Screen.width / 2 - 40, Screen.height - 40, 80, 30), 
 				str);
+		GUI.Box (
+			new Rect (Screen.width - 100 , Screen.height/2, 100, 30),
+			"Score: "+ Bullet.getScore());
 		
 	}
 	
